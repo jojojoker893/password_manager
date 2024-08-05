@@ -18,7 +18,8 @@ do
                 read password
 
                 echo " $service:$username:$password " >> passwordlist.txt
-                echo "パスワードの追加は成功しました。" ;;
+                echo "パスワードの追加は成功しました。" 
+		;;
 
             "Get Password")
                 echo "サービス名を入力してください:"
@@ -27,13 +28,16 @@ do
                 if ! grep -q "$service" passwordlist.txt;then
                     echo "そのサービス登録されていません。"
                 else
-                    "aaaa"
+                    echo "サービス名: $service"
+		    echo "ユーザー名: $username"
+		    echo "パスワード: $password"
                 fi
                 ;;
 
             "Exit")
                 echo "Thank you!"
-                break ;;
+                break 
+		;;
             
             *)
                 echo "入力が間違えています。Add Password/Get Password/Exit から入力してください。" ;;
