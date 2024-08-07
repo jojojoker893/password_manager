@@ -17,29 +17,33 @@ do
                 echo "パスワードを入力してください："
                 read password
 
-                echo " $service:$username:$password " >> passwordlist.txt
+                echo "$service:$username:$password" >> passwordlist.txt
                 echo "パスワードの追加は成功しました。" 
-		;;
+		        ;;
 
             "Get Password")
-                echo "サービス名を入力してください:"
-                read service 
+                read -p "サービス名を入力してください:" service 
+                list=$(grep "^[[:space:]]*$service:" passwordlist.txt)
+
+                if [ -n "$list" ]; then
+                IFS=":" read service username password <<< "$list" 
                 
-                if ! grep -q "$service" passwordlist.txt;then
-                    echo "そのサービス登録されていません。"
+                    echo "サービス名："$service
+                    echo "ユーザー名："$username
+                    echo "パスワード："$password
+
                 else
-                    echo "サービス名: $service"
-		    echo "ユーザー名: $username"
-		    echo "パスワード: $password"
+                    echo "そのサービスは登録されていません。"
                 fi
                 ;;
 
             "Exit")
                 echo "Thank you!"
                 break 
-		;;
+		        ;;
             
             *)
-                echo "入力が間違えています。Add Password/Get Password/Exit から入力してください。" ;;
+                echo "入力が間違えています。Add Password/Get Password/Exit から入力してください。" 
+                ;;
     esac
 done
