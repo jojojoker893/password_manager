@@ -1,5 +1,8 @@
 #!/bin/bash
 
+list="passwordlist.txt"
+encodelist="${list}.gpg"
+
 while true
 do
     echo "パスワードマネージャーへようこそ！"
@@ -17,16 +20,21 @@ do
                 echo "パスワードを入力してください："
                 read password
 
-                echo "$service:$username:$password" >> passwordlist.txt
+                echo "$service:$username:$password" >> "$list"
+                gpg --batch --yes -c "$list"
+                rm -f "$list"
                 echo "パスワードの追加は成功しました。" 
-		        ;;
+                
+                ;;
 
             "Get Password")
-                read -p "サービス名を入力してください:" service 
-                list=$(grep "^[[:space:]]*$service:" passwordlist.txt)
 
-                if [ -n "$list" ]; then
-                IFS=":" read service username password <<< "$list" 
+                read -p "サービス名を入力してください:" service 
+            
+                newlist=$(gpg --batch --yes -d "$encodelist" | grep "$service")
+
+                if [ -n "$newlist" ]; then
+                IFS=":" read service username password <<< "$newlist" 
                 
                     echo "サービス名："$service
                     echo "ユーザー名："$username
