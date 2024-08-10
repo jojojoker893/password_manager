@@ -19,11 +19,14 @@ do
 
                 echo "$service:$username:$password" >> passwordlist.txt
                 echo "パスワードの追加は成功しました。" 
+
+                gpg -c passwordlist.txt
 		        ;;
 
             "Get Password")
                 read -p "サービス名を入力してください:" service 
-                list=$(grep "^[[:space:]]*$service:" passwordlist.txt)
+            
+                list=$(grep "$service:" passwordlist.txt)
 
                 if [ -n "$list" ]; then
                 IFS=":" read service username password <<< "$list" 
