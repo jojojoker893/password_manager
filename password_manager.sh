@@ -24,17 +24,17 @@ do
                 gpg --batch --yes -c "$list"
                 rm -f "$list"
                 echo "パスワードの追加は成功しました。" 
-
                 ;;
 
             "Get Password")
-                gpg --batch --yes -d "$encodelist" > "$list"
+
                 read -p "サービス名を入力してください:" service 
             
-                list=$(grep "$service:" passwordlist.txt.gpg)
+   
+                newlist=$(gpg --batch --yes -d "$encodelist" | grep "$service")
 
-                if [ -n "$list" ]; then
-                IFS=":" read service username password <<< "$list" 
+                if [ -n "$newlist" ]; then
+                IFS=":" read service username password <<< "$newlist" 
                 
                     echo "サービス名："$service
                     echo "ユーザー名："$username
@@ -43,9 +43,6 @@ do
                 else
                     echo "そのサービスは登録されていません。"
                 fi
-
-                rm -f "$list"
-                gpg --batch --yes -c "$list"
                 ;;
 
             "Exit")
