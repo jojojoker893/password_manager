@@ -24,13 +24,13 @@ do
                 gpg --batch --yes -c "$list"
                 rm -f "$list"
                 echo "パスワードの追加は成功しました。" 
-                
                 ;;
 
             "Get Password")
 
                 read -p "サービス名を入力してください:" service 
             
+   
                 newlist=$(gpg --batch --yes -d "$encodelist" | grep "$service")
 
                 if [ -n "$newlist" ]; then
